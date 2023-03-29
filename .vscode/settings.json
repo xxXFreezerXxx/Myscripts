@@ -1,0 +1,11 @@
+{
+    "Lua.diagnostics.globals": [
+        "freq",
+        "amp",
+        "obj",
+        "chk",
+        "noi",
+        "sig",
+        "color"
+    ]
+}

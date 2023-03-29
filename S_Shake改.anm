@@ -1,0 +1,45 @@
+--トラックを用意
+--track0:大きさ,0,1,1,0.01
+--track1:速度,0,100,10,0.01
+--dialog:振れ幅,amp={35,20,40,10};揺れ速度,freq={5.5,4.5,10,7};揺れずらし,sig={0.1,0.8,0.4,0.7};ノイズ,noi={0.01,0.01,0.01,0.01};オブジェクトを回転させる/chk,chk=;
+
+function Createrandom()
+    while(true)
+    do
+        local z1 = math.random()*2-1
+        local z2 = math.random()*2-1
+        local multiplied = z1^2+z2^2
+        if(multiplied<=1) then
+            return {z1,z2}
+        end
+    end
+end
+function Mullar_rand()
+    local z = Createrandom()
+    local rr = z[1]^2+z[2]^2
+    local y1 = z[1]*math.sqrt(-1*math.log(rr)*2/rr)
+    local y2 = z[2]*math.sqrt(-1*math.log(rr)*2/rr)
+    return {y1,y2}
+end
+function Radian(degree) -- ラジアンに変換
+    return degree*(math.pi/180)
+end
+function Shake(amplitude,frequency,signal,noise,time)
+    return (math.sin(Radian((time-signal+Mullar_rand()[1]*noise)*frequency*obj.getvalue(1)*30))*amplitude*obj.getvalue(0))
+end
+x=Shake(amp[1],freq[1],sig[1],noi[1],obj.time)
+y=Shake(amp[2],freq[2],sig[2],noi[2],obj.time)
+z=Shake(amp[3],freq[3],sig[3],noi[3],obj.time)
+r=Shake(amp[4],freq[4],sig[4],noi[4],obj.time)
+
+if(chk==1) then
+    obj.rx=x
+    obj.ry=y
+    obj.oz=z
+    obj.rz=r
+else
+    obj.ox=x
+    obj.oy=y
+    obj.oz=z
+    obj.rz=r
+end

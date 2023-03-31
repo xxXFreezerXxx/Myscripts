@@ -4,7 +4,7 @@
 --track3:繰り返し,0,100,0,1
 --color:0xffffff
 --check0:相対サイズにする,0
-local function Radian(degree) -- ラジアンに変換
+local function Radian(degree)
     return degree*(math.pi/180)
 end
 local function stroke(size,detail,x,y,color,cut)

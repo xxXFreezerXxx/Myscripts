@@ -1,6 +1,7 @@
 --track0:太さ,0,1000,10,1
 --track1:細かさ,1,1000,10,1
 --track2:切り抜き,0,1,0,1
+--track3:繰り返し,1,100,1,1
 --color:0xffffff
 local function Radian(degree) -- ラジアンに変換
     return degree*(math.pi/180)
@@ -8,8 +9,11 @@ end
 local function stroke(size,detail,x,y,color,cut)
     obj.setoption("dst","tmp",obj.w,obj.h)
     obj.effect("単色化","強さ",100,"輝度を保持する",0,"color",color)
-    for i = 1, 360, detail do
-        obj.draw(math.sin(Radian(i))*size+x,math.cos(Radian(i))*size+y,obj.oz)
+    for ii=1,obj.getvalue(3), 1 do
+        for i = 1, 360, detail do
+            obj.draw(math.sin(Radian(i*ii))*size+x,math.cos(Radian(i*ii))*size+y,obj.oz)
+        end
+        
     end
     if (cut==1) then
         obj.effect("単色化","強さ",100,"輝度を保持する",0,"color",(color+8388608)%16777216)

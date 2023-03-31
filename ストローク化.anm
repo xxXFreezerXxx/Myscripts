@@ -1,27 +1,44 @@
 --track0:太さ,0,1000,10,1
 --track1:細かさ,1,1000,10,1
 --track2:切り抜き,0,1,0,1
---track3:繰り返し,1,100,1,1
+--track3:繰り返し,0,100,0,1
 --color:0xffffff
+--check0:相対サイズにする,0
 local function Radian(degree) -- ラジアンに変換
     return degree*(math.pi/180)
 end
 local function stroke(size,detail,x,y,color,cut)
-    obj.setoption("dst","tmp",obj.screen_w,obj.screen_h)
+    obj.setoption("drawtarget","tempbuffer",obj.screen_w,obj.screen_h)
     obj.effect("単色化","強さ",100,"輝度を保持する",0,"color",color)
-    for ii=1,obj.getvalue(3), 1 do
+    local repeatoption =obj.getvalue(3)
+    
+    if repeatoption==0 then
+        if(obj.w<obj.h) then
+            repeatoption=math.ceil(size/obj.w)
+        else
+            repeatoption=math.ceil(size/obj.h)
+        end
+    end
+    for ii=1,repeatoption, 1 do
         for i = 1, 360, detail do
-            obj.draw(math.sin(Radian(i*ii))*size+x,math.cos(Radian(i*ii))*size+y,obj.oz)
+            obj.draw(math.sin(Radian(i))*(size/repeatoption)*ii,math.cos(Radian(i))*(size/repeatoption)*ii,0)
         end
         
     end
     if (cut==1) then
         obj.effect("単色化","強さ",100,"輝度を保持する",0,"color",(color+8388608)%16777216)
-        obj.draw(x,y,obj.oz)
+        obj.draw(0,0,obj.oz)
         obj.effect("クロマキー","色相範囲",0,"彩度範囲",0,"境界補正",1,"色彩補正",1,"透過補正",0,"color_yc",(color+8388608)%16777216)
     end
     obj.load("tempbuffer")
     
 end
-stroke(obj.getvalue(0),(360/obj.getvalue(1)),obj.ox,obj.oy,color,obj.getvalue(2))
+
+local ssize = obj.getvalue(0)
+if(obj.check0) then
+    local av=(obj.w+obj.h)/2
+    ssize = ssize*av/200
+end
+
+stroke(ssize,(360/obj.getvalue(1)),obj.x,obj.y,color,obj.getvalue(2))
 

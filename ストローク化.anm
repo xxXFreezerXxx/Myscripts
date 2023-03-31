@@ -7,7 +7,7 @@ local function Radian(degree) -- ラジアンに変換
     return degree*(math.pi/180)
 end
 local function stroke(size,detail,x,y,color,cut)
-    obj.setoption("dst","tmp",obj.w,obj.h)
+    obj.setoption("dst","tmp",obj.screen_w,obj.screen_h)
     obj.effect("単色化","強さ",100,"輝度を保持する",0,"color",color)
     for ii=1,obj.getvalue(3), 1 do
         for i = 1, 360, detail do
